@@ -93,7 +93,8 @@ resource "google_compute_firewall" "runner_egress" {
   network = data.google_compute_network.vpc.name
 
   direction = "EGRESS"
-
+  #priority = 
+  
   allow {
     protocol = "tcp"
     ports    = ["443"]

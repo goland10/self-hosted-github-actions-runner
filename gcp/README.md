@@ -10,7 +10,9 @@ Key features:
 - **Cloud NAT** enabled for outbound internet access from private subnet.  
 - VM installs **Google Cloud SDK**, **kubectl**, **Helm**, and the **GitHub Actions runner** automatically.  
 
----
+
+![Architecture](./gcp_architecture.png)
+
 
 ## Prerequisites
 Before using this Terraform project, ensure the following:  
