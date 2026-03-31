@@ -1,6 +1,0 @@
-project_id = "github-actions-terraform-k8s"
-region     = "europe-west1"
-zone       = "europe-west1-b"
-network    = "prod-01"
-subnet     = "prod-01-subnet"
-secret_name = "github_pat"

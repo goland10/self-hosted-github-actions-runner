@@ -35,8 +35,7 @@ To register a self-hosted runner, you need a GitHub fine-grained PAT with specif
 
 6. Under **expiration** set the Token expiration (recommended: 90 days or a manageable custom period). 
 
-4. Under **Repository access**, select **Only select repositories**, then choose the repository you want the runner to register to, for example:  
-   - `goland10/multi-cloud-k8s`  
+4. Under **Repository access**, select **Only select repositories**, then choose the repository you want the runner to register to, for example: `goland10/multi-cloud-k8s`  
 
 5. Under **Permissions**, click **Add permissions** and set the following repository permissions (minimum required):  
    - **Administration → Read and write** ✅  
