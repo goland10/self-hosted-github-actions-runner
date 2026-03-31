@@ -20,5 +20,5 @@ output "runner_internal_ip" {
 
 output "iap_ssh_command" {
   description = "Command to SSH into the runner VM using IAP"
-  value = "gcloud compute ssh ${google_compute_instance.runner.name} --zone ${google_compute_instance.runner.zone} --tunnel-through-iap --project ${var.project_id}"
+  value       = "gcloud compute ssh ${google_compute_instance.runner.name} --zone ${google_compute_instance.runner.zone} --tunnel-through-iap --project ${var.project_id}"
 }

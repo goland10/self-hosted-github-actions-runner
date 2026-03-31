@@ -48,9 +48,9 @@ data "google_compute_subnetwork" "subnet" {
 ############################
 
 resource "google_compute_router" "nat_router" {
-name = "gha-runner-nat-router"
-network = data.google_compute_network.vpc.name
-region = var.region
+  name    = "gha-runner-nat-router"
+  network = data.google_compute_network.vpc.name
+  region  = var.region
 }
 
 resource "google_compute_router_nat" "nat" {
@@ -58,7 +58,7 @@ resource "google_compute_router_nat" "nat" {
   router = google_compute_router.nat_router.name
   region = var.region
 
-  nat_ip_allocate_option = "AUTO_ONLY"
+  nat_ip_allocate_option             = "AUTO_ONLY"
   source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
   subnetwork {
     name                    = data.google_compute_subnetwork.subnet.self_link
@@ -71,17 +71,17 @@ resource "google_compute_router_nat" "nat" {
 ############################
 
 resource "google_compute_firewall" "iap_tunnel_ingress" {
-name = "allow-ingress-from-iap"
-network = data.google_compute_network.vpc.name
+  name    = "allow-ingress-from-iap"
+  network = data.google_compute_network.vpc.name
 
-direction = "INGRESS"
-allow {
-protocol = "tcp"
-ports = ["22"]
-}
+  direction = "INGRESS"
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
 
-target_service_accounts = [google_service_account.runner.email]
-source_ranges = ["35.235.240.0/20"] # IAP TCP forwarding range
+  target_service_accounts = [google_service_account.runner.email]
+  source_ranges           = ["35.235.240.0/20"] # IAP TCP forwarding range
 }
 
 ############################
@@ -110,8 +110,8 @@ resource "google_compute_firewall" "runner_egress" {
     ports    = ["53"]
   }
 
-  destination_ranges       = ["0.0.0.0/0"]
-  target_service_accounts  = [google_service_account.runner.email]
+  destination_ranges      = ["0.0.0.0/0"]
+  target_service_accounts = [google_service_account.runner.email]
 }
 
 ############################
@@ -143,9 +143,9 @@ resource "google_compute_instance" "runner" {
   }
 
   metadata_startup_script = templatefile("${path.module}/startup_script.sh", {
-  secret_name      = var.secret_name
-  repo_url  = var.repo_url
-  gh_api      = "${replace(var.repo_url, "github.com", "api.github.com/repos")}/actions/runners/registration-token"
+    secret_name = var.secret_name
+    repo_url    = var.repo_url
+    gh_api      = "${replace(var.repo_url, "github.com", "api.github.com/repos")}/actions/runners/registration-token"
   })
 
 }

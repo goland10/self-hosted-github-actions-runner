@@ -8,14 +8,14 @@ zone       = "me-west1-b"
 ############################################################
 # Networking
 ############################################################
-network    = "internal-vpc"
-subnet     = "internal-subnet"
+network = "internal-vpc"
+subnet  = "internal-subnet"
 
 ############################################################
 # Compute Instance (GHA Runner)
 ############################################################
 instance_name = "gha-runner"
-machine_type = "e2-medium"
+machine_type  = "e2-medium"
 
 boot_disk = {
   image = "projects/ubuntu-os-cloud/global/images/family/ubuntu-2404-lts-amd64"
