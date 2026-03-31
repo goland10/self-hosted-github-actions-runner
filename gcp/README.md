@@ -12,7 +12,7 @@ Key features:
 - The runner can be used as a secure bastion for interactive access to the Kubernetes cluster.
 
 
-![Architecture](./gcp_architecture.png)
+![Architecture](./docs/gcp_architecture.png)
 
 
 ## Prerequisites
@@ -92,20 +92,34 @@ Users must provide the following variables in a .tfvars file:
 
 ## Example: Running the Automation
 
-1. Create a runner.tfvars file with your variables:
-    ```h
-    project_id = "github-actions-terraform-k8s"
-    region     = "europe-west1"
-    zone       = "europe-west1-b"
-    network    = "dev-01"
-    subnet     = "dev-01-subnet"
-    secret_name = "github_pat"
-    ```
+1. Setup your variables.
+    [Sample tfvars file](./runner.tfvars)
+    
 2. Run terraform
     ```bash
     terraform init
     terraform validate
     terraform plan -var-file runner.tfvars -out=tfplan
-    terraform apply -var-file="runner.tfvars" tfplan
+    terraform apply tfplan
     ```
 Terraform will create the service account, networking resources, firewall rules, NAT, and the VM with the GitHub Actions runner configured. Once completed, the runner will automatically register with your GitHub repository.
+
+3. SSH to the runner securely with the ssh command provided by 'terraform apply' output.
+
+    ![iap_ssh_command](./docs/iap_ssh_command.png)
+
+    `gcloud compute ssh gha-runner --zone me-west1-b --tunnel-through-iap --project internal-project-mission`
+
+4. Verify the runner is listening to Github.
+    At the first startup you can track the startup script with 
+    
+    `journalctl -u google-startup-scripts.service -fex`
+
+    When the startup script is completed run
+
+    `systemctl status actions.runner.*`
+
+    ![systemctl status actions.runner.*](./docs/systemctl_status_actions.runner.png)
+
+    You can also verify that from Github.
+    Navigate to the repo Settings tab -> Actions -> Runners

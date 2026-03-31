@@ -23,9 +23,9 @@ GH_API=${gh_api}        #"https://api.github.com/repos/goland10/multi-cloud-k8s/
 id $RUNNER_USER &>/dev/null || useradd -m $RUNNER_USER
 # Download the latest runner package and Extract the installer
 mkdir -p $RUNNER_DIR
+cd $RUNNER_DIR
 
 if [ ! -f "$RUNNER_DIR/config.sh" ]; then
-  cd $RUNNER_DIR
   curl -o actions-runner-linux-x64.tar.gz -L https://github.com/actions/runner/releases/download/v2.331.0/actions-runner-linux-x64-2.331.0.tar.gz
   tar xzf ./actions-runner-linux-x64.tar.gz
   chown -R $RUNNER_USER:$RUNNER_USER $RUNNER_HOME
@@ -39,13 +39,13 @@ if [ ! -f "$RUNNER_DIR/.runner" ]; then
     $GH_API | jq -r .token)
   # Configure and start the runner
   sudo -u $RUNNER_USER bash -c "
-  cd $RUNNER_DIR
   ./config.sh \
     --url $REPO_URL \
     --token $RUNNER_TOKEN \
     --unattended \
     --replace
-  ./run.sh
   "
-  
+  ./svc.sh install $RUNNER_USER
 fi
+
+./svc.sh start

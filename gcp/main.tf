@@ -146,9 +146,6 @@ resource "google_compute_instance" "runner" {
   secret_name      = var.secret_name
   repo_url  = var.repo_url
   gh_api      = "${replace(var.repo_url, "github.com", "api.github.com/repos")}/actions/runners/registration-token"
-  #REPO_URL=${repo_url}    #"https://github.com/goland10/multi-cloud-k8s"
-  #GH_API=${gh_api}        #"https://api.github.com/repos/goland10/multi-cloud-k8s/actions/runners/registration-token"
   })
 
-  #metadata_startup_script = file("${path.module}/startup_script.sh")  
 }
