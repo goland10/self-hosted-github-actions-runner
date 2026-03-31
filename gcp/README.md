@@ -122,4 +122,7 @@ Terraform will create the service account, networking resources, firewall rules,
     ![systemctl status actions.runner.*](./docs/systemctl_status_actions.runner.png)
 
     You can also verify that from Github.
+
     Navigate to the repo Settings tab -> Actions -> Runners
+
+    ![runners_page](./docs/runners_page.png)
