@@ -11,9 +11,11 @@ Key features:
 - VM installs **Google Cloud SDK**, **kubectl**, **Helm**, and the **GitHub Actions runner** automatically.  
 - The runner can be used as a secure bastion for interactive access to the Kubernetes cluster.
 
+---
 
 ![Architecture](./docs/gcp_architecture.png)
 
+---
 
 ## Prerequisites
 Before using this Terraform project, ensure the following:  
@@ -80,20 +82,27 @@ To register a self-hosted runner, you need a GitHub fine-grained PAT with specif
 
 ## Required Variables (runner.tfvars)
 
-Users must provide the following variables in a .tfvars file:
-| Variable     | Description                                    | Example                          |
-| ------------ | ---------------------------------------------- | -------------------------------- |
-| `project_id` | GCP project ID where resources will be created | `"github-actions-terraform-k8s"` |
-| `region`     | GCP region for networking and NAT              | `"europe-west1"`                 |
-| `zone`       | GCP zone for the runner VM                     | `"europe-west1-b"`               |
-| `network`    | Existing VPC network name                      | `"dev-01"`                       |
-| `subnet`     | Existing subnet name                           | `"dev-01-subnet"`                |
-| `secret_name`| The secret that was stored in the secret manager| `"github_pat"`                  |
+Users need to provide the following variables in a .tfvars file:
+
+
+| Name | Description | Type | Default | Required |
+| :--- | :--- | :--- | :--- | :--- |
+| `project_id` | The GCP project ID | `string` | n/a | **Yes** |
+| `region` | The region to deploy resources | `string` | n/a | **Yes** |
+| `zone` | The zone to deploy the VM | `string` | n/a | **Yes** |
+| `network` | The name of the existing VPC network | `string` | n/a | **Yes** |
+| `subnet` | The name of the existing subnetwork | `string` | n/a | **Yes** |
+| `repo_url` | The full GitHub repository URL | `string` | n/a | **Yes** |
+| `instance_name` | Name of the GitHub Actions runner VM | `string` | `"gha-runner"` | No |
+| `machine_type` | The machine type for the runner VM | `string` | `"e2-medium"` | No |
+| `boot_disk` | Boot disk configuration | `object` | `{ image: "ubuntu-2404-lts-amd64", size: 30 }` | No |
+| `secret_name` | Secret Manager name for the GitHub PAT | `string` | `"github_pat"` | No |
 
 ## Example: Running the Automation
 
 1. Setup your variables.
-    [Sample tfvars file](./runner.tfvars)
+
+    [Sample tfvars file here](./runner.tfvars)
     
 2. Run terraform
     ```bash
@@ -111,7 +120,8 @@ Terraform will create the service account, networking resources, firewall rules,
     `gcloud compute ssh gha-runner --zone me-west1-b --tunnel-through-iap --project internal-project-mission`
 
 4. Verify the runner is listening to Github.
-    At the first startup you can track the startup script with 
+    
+    At the very first startup you can track the startup script with 
     
     `journalctl -u google-startup-scripts.service -fex`
 
@@ -126,3 +136,7 @@ Terraform will create the service account, networking resources, firewall rules,
     Navigate to the repo Settings tab -> Actions -> Runners
 
     ![runners_page](./docs/runners_page.png)
+
+5. Destroy
+    
+    terraform destroy -var-file runner.tfvars -auto-approve
